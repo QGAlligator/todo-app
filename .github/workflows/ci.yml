@@ -29,3 +29,17 @@ jobs:
 
       - name: Lancer la vérification
         run: PYTHONPATH=. pytest
+
+      - name: Notification Discord (succès)
+        if: ${{ success() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a réussi sur branche *${{ github.ref_name }}* par ${{ github.actor }}. 👉 Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          ${{ secrets.https://discord.com/api/webhooks/1419983260519239712/vAAug4yeKbIYtaTeIuO27lusG0egzeOsKqyDCJ0vzY-mkrtmFlVJIyqpxOlewAI_Fu0w }}
+
+      - name: Notification Discord (échec)
+        if: ${{ failure() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a échoué sur branche *${{ github.ref_name }}* par ${{ github.actor }}. 👉 Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          ${{ secrets.https://discord.com/api/webhooks/1419983260519239712/vAAug4yeKbIYtaTeIuO27lusG0egzeOsKqyDCJ0vzY-mkrtmFlVJIyqpxOlewAI_Fu0w }}
