@@ -33,12 +33,12 @@ jobs:
         if: ${{ success() }}
         run: |
           curl -H "Content-Type: application/json" \
-          -d "{\"content\": \"Workflow *${{ github.workflow }}* a réussi sur branche *${{ github.ref_name }}* par ${{ github.actor }}. 👉 Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a réussi sur branche *${{ github.ref_name }}* par ${{ github.actor }}.Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notification Discord (échec)
         if: ${{ failure() }}
         run: |
           curl -H "Content-Type: application/json" \
-          -d "{\"content\": \"Workflow *${{ github.workflow }}* a échoué sur branche *${{ github.ref_name }}* par ${{ github.actor }}. 👉 Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a échoué sur branche *${{ github.ref_name }}* par ${{ github.actor }}.Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
