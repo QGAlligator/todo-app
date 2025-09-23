@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches:
@@ -19,7 +20,7 @@ jobs:
       - name: Installer Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10" # ou la version que tu utilises
+          python-version: "3.10"
 
       - name: Installer les dépendances
         run: |
@@ -27,4 +28,17 @@ jobs:
           pip install pytest
 
       - name: Lancer la vérification
-        run: pytest
+        run: PYTHONPATH=. pytest
+      - name: Notification Discord (succès)
+        if: ${{ success() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a réussi sur branche *${{ github.ref_name }}* par ${{ github.actor }}.Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Notification Discord (échec)
+        if: ${{ failure() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"Workflow *${{ github.workflow }}* a échoué sur branche *${{ github.ref_name }}* par ${{ github.actor }}.Voir les détails : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
