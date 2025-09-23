@@ -29,7 +29,6 @@ jobs:
 
       - name: Lancer la vérification
         run: PYTHONPATH=. pytest
-
       - name: Notification Discord (succès)
         if: ${{ success() }}
         run: |
