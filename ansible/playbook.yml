@@ -1,0 +1,46 @@
+---
+- name: Déploiement de l app web
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: apt update
+      apt:
+        update_cache: yes
+
+    - name: Installer dépendances
+      apt:
+        name:
+          - git
+          - nginx
+        state: present
+
+    - name: Cloner le dépôt de l application
+      git:
+        repo: "https://github.com/QGAlligator/todo-app.git"
+        dest: /var/www/app
+        version: dev
+
+    - name: Configuration Nginx
+      copy:
+        dest: /etc/nginx/sites-available/app
+        content: |
+          server {
+              listen 80;
+              root /var/www/app;
+              index contact.html;
+              server_name _;
+          }
+      notify: Restart nginx
+
+    - name: Activer la config Nginx
+      file:
+        src: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-enabled/app
+        state: link
+        force: yes
+
+  handlers:
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
