@@ -7,7 +7,7 @@
       apt:
         update_cache: yes
 
-    - name: Installer dépendances
+    - name: Installation des dependances
       apt:
         name:
           - git
@@ -16,7 +16,7 @@
           - python3-pip
         state: present
 
-    - name: Cloner le dépôt de l application
+    - name: Cloner le repo git de l app
       git:
         repo: "https://github.com/QGAlligator/todo-app.git"
         dest: /var/www/app
@@ -34,12 +34,18 @@
           }
       notify: Restart nginx
 
-    - name: Activer la config Nginx
+    - name: Activation de la config Nginx
       file:
         src: /etc/nginx/sites-available/app
         dest: /etc/nginx/sites-enabled/app
         state: link
         force: yes
+
+    - name: Desactivation du site par défaut de Nginx
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Restart nginx
 
   handlers:
     - name: Restart nginx
