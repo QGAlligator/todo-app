@@ -19,11 +19,11 @@ jobs:
       - name: Create private key file
         run: |
           echo "${{ secrets.AWS_SSH_KEY }}" > aws_app_todo.pem
-          chmod 600 aws_key.pem
+          chmod 600 aws_app_todo.pem
 
       - name: Déployment with Ansible
         run: |
           ansible-playbook -i /ansible/inventory_aws.ini /ansible/deploy.yml
 
       - name: Remove key file
-        run: rm -f aws_key.pem
+        run: rm -f aws_app_todo.pem
