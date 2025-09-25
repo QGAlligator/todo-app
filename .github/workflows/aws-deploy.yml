@@ -23,7 +23,7 @@ jobs:
 
       - name: Déployment with Ansible
         run: |
-          ansible-playbook -i ./ansible/inventory_aws.ini ./ansible/deploy.yml
+          ansible-playbook -i ../../ansible/inventory_aws.ini ../../ansible/deploy.yml
 
       - name: Remove key file
         run: rm -f aws_key.pem
