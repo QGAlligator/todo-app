@@ -1,0 +1,29 @@
+name: Deploy ToDoApp to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Installer Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible sshpass
+
+      - name: Create private key file
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" > aws_key.pem
+          chmod 600 aws_key.pem
+
+      - name: Déployment with Ansible
+        run: |
+          ansible-playbook -i inventory_aws.ini deploy.yml
+
+      - name: Remove key file
+        run: rm -f aws_key.pem
