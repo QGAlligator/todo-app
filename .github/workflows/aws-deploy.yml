@@ -3,7 +3,7 @@ name: Deploy ToDoApp to AWS
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   deploy:
